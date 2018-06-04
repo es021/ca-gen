@@ -1,0 +1,42 @@
+<html>
+
+<head>
+	<title>
+		Ca Gen Ext
+	</title>
+</head>
+
+<body>
+	<h3>Ca Gen Ext File</h3>
+	Copy all in HTML Box in CA
+</body>
+
+<script>
+	function Main(){
+		var root = "https://es021.github.io/ca-gen";
+		
+		var data = [
+			{label:"Javascript To Get User Info",url:"local-storage.js"},
+			{label:"External CSS Styling",url:"framework.css"}
+		];
+		
+		var list = document.createElement('ul');
+		
+		var timeNow = (new Date()).getTime();
+		
+		for(var i in data){
+			var d = data[i];
+			var li = document.createElement('li');
+			var url =  root + "/" + d.url + "?"+timeNow;
+			li.innerHTML = "<a target='_blank' href='"+ url + "'>"+d.label+"</a>";
+			list.appendChild(li);
+		}
+		
+		document.body.appendChild(list);
+	}
+
+	Main();
+
+</script>
+
+</html>
