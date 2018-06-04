@@ -92,32 +92,33 @@ function customEventHandler() {
 	var CUSTOM_CLASS = {
 		DISABLED: "INPUT-DISABLED",
 		MANDATORY: "INPUT-MANDATORY",
-		OPTIONAL: "INPUT-OPTIONAL"
+		TAB_DISABLED:"TAB-DISABLED",
+		BTN_DISABLED:"MENU-BTN-DISABLED",
 	};
 
 	var intervals = {};
 	intervals[CUSTOM_CLASS.DISABLED] = setInterval(function () {
 			inputEvent(CUSTOM_CLASS.DISABLED);
 		}, INTERVAL_TIME);
-
+		
 	intervals[CUSTOM_CLASS.MANDATORY] = setInterval(function () {
 			inputEvent(CUSTOM_CLASS.MANDATORY);
 		}, INTERVAL_TIME);
 
-	/*
-	intervals[CUSTOM_CLASS.OPTIONAL] = setInterval(function(){
-	inputEvent(CUSTOM_CLASS.OPTIONAL);
-	}, INTERVAL_TIME);
-	 */
+	intervals[CUSTOM_CLASS.TAB_DISABLED] = setInterval(function () {
+			inputEvent(CUSTOM_CLASS.TAB_DISABLED);
+		}, INTERVAL_TIME);
+
 
 	function inputEventAction(e, className) {
 		e.removeAttribute("required");
 		e.removeAttribute("disabled");
-		if (className == CUSTOM_CLASS.DISABLED) {
+		
+		if (className == CUSTOM_CLASS.DISABLED || className == CUSTOM_CLASS.TAB_DISABLED || className == CUSTOM_CLASS.BTN_DISABLED) {
 			e.setAttribute("disabled", "");
 		} else if (className == CUSTOM_CLASS.MANDATORY) {
 			e.setAttribute("required", "");
-		} else if (className === CUSTOM_CLASS.OPTIONAL) {}
+		}
 	}
 
 	setTimeout(function () {
@@ -214,13 +215,19 @@ function customLocalStorage() {
 
 	function setValue(elemId, elemVal) {
 		var interval = setInterval(function () {
+			
+			try{
 				var el = document.getElementById(elemId);
 				//var el = document.getElementsByClassName(elemId)[0];
 				if (el != null && typeof el !== "undefined") {
 					el.value = elemVal;
-					el.addAtribute("disabled","");
-					clearInterval(interval)
+					el.setAttribute("disabled","");
+					//clearInterval(interval)
 				}
+			}catch(err){
+				console.log("setValue err",err);
+			}
+				
 			}, 500);
 	}
 

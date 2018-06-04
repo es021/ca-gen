@@ -23,8 +23,8 @@ Breadcrumb : set name to ltl_breadcrumb
 
 */
 body{
-background: blue;
-font-family: Arial, Helvetica, sans-serif !important;
+	background: blue;
+	font-family: Arial, Helvetica, sans-serif !important;
 }
 
 div.gen_content{
@@ -87,17 +87,16 @@ button[id*="TAB"]{
 color:white !important;
 border-color: #666666!important;
 background-color: #666666!important;
-
 }
 
-button[id*="TAB"]:hover, button[id*="TAB_ACTIVE"]{
+button[id*="TAB"]:hover, button[id*="TAB_ACTIVE"], button[id*="TAB_active"]{
 background-color: #f5871f!important;
 color: white !important;
 }
 
-button[disabled="disabled"],button[disabled=""],button.MENU-BTN-DISABLED
-,button[disabled="disabled"]:hover,button[disabled=""]:hover,button.MENU-BTN-DISABLED:hover
-,button[disabled="disabled"]:active,button[disabled=""]:active,button.MENU-BTN-DISABLED:active{
+button[disabled="disabled"],button[disabled=""],button.MENU-BTN-DISABLED,button[class*="DISABLED"]
+,button[disabled="disabled"]:hover,button[disabled=""]:hover,button.MENU-BTN-DISABLED:hover,button[class*="DISABLED"]:hover
+,button[disabled="disabled"]:active,button[disabled=""]:active,button[class*="DISABLED"]:active{
 color: #4a4a4a !important;
 background-color: #c3c3c3 !important;
 cursor: not-allowed !important;
@@ -105,7 +104,8 @@ border-color: #545454 !important;
 }
 
 button[id*="TAB"][disabled="disabled"],
-button[id*="TAB"][disabled="disabled"]:hover{
+button[id*="TAB"][disabled="disabled"]:hover,
+button.TAB-DISABLED, button.TAB-DISABLED:hover, button.TAB-DISABLED:active{
 color: #999999 !important;
 background-color: #666666 !important;
 cursor: not-allowed !important;
