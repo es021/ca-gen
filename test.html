@@ -1,73 +1,164 @@
+<html>
+
+<head>
+
+<style>
+#custom-popup {
+    display: flex;
+    justify-content: center;
+	padding-top: 50px;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    position: fixed;
+	top: 0;
+	left: 0;
+	box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
+#custom-popup #cp-background {
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
+	background: rgba(0, 0, 0, 0.5);
+	top: 0;
+	left: 0;
+	box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
+#custom-popup #cp-content {
+	position: relative;
+	background: rgba(0,0,0,0);
+	width: 500px;
+	max-width: 99vw;
+	box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
+#custom-popup #cp-content #cp-header{
+	background: black;
+	color:white;
+	padding: 10px;
+	text-align:center;
+	text-transform:uppercase;
+	border-radius: 10px 10px 0px 0px;
+}
+
+#custom-popup #cp-content #cp-body{
+	background: white;
+	padding: 20px;
+	border-radius: 0px 0px 10px 10px;
+	word-wrap: break-word;
+}
+
+#custom-popup #cp-content #cp-close{
+	border-radius: 100%;
+	position: absolute;
+	right: 4px;
+	top: 4px;
+	text-align:center;
+	font-weight:bold;
+	width:20px;
+	height:20px;
+	background-color:rgba(0,0,0,0.3);
+	color:white;
+	padding:3px;
+	cursor:pointer;
+}
+
+#custom-popup #cp-content #cp-close:hover{
+	opacity: 0.8;
+}
+
+#custom-popup #cp-content #cp-close:active{
+	opacity: 1;
+}
+
+#custom-popup #cp-content.cp-error #cp-header{
+	background: #dd2727;
+}
+#custom-popup #cp-content.cp-info #cp-header{
+	background: #2f7efc;
+}
+#custom-popup #cp-content.cp-success #cp-header{
+	background: #3aa536;
+}
+
+
+</style>
 <script>
+
 // ################################################################
 // ################################################################
 // Custom Popup ------------------------------------------
 
 var CUSTOM_POPUP = null;
 
-var CustomPopupClass = function () {
+var CustomPopupClass = function(){
 	this.TYPE_ERR = "error";
 	this.TYPE_INFO = "info";
 	this.TYPE_SUCCESS = "success";
 
 	this.elem = document.createElement('div');
 	this.elem.id = "custom-popup";
-
+	
 	this.background = document.createElement('div');
 	this.background.id = "cp-background";
-
+	
 	this.content = document.createElement('div');
 	this.content.id = "cp-content";
-
+	
 	this.header = document.createElement('div');
 	this.header.id = "cp-header";
-
+	
 	this.close = document.createElement('div');
 	this.close.id = "cp-close";
 	this.close.innerHTML = "X";
-
+	
 	this.body = document.createElement('div');
 	this.body.id = "cp-body";
 
 	this.content.appendChild(this.close);
 	this.content.appendChild(this.header);
 	this.content.appendChild(this.body);
-
+	
 	this.elem.appendChild(this.background);
 	this.elem.appendChild(this.content);
-
+		
 	document.body.appendChild(this.elem);
-
+	
 	this.registerEvent();
 };
 
-CustomPopupClass.prototype.openPopup = function (type, message) {
-	console.log("CustomPopupClass", type, message);
-	this.content.className = "cp-" + type;
+CustomPopupClass.prototype.openPopup = function(type, message){
+	console.log("CustomPopupClass",type,message);
+	this.content.className = "cp-"+type;
 	this.header.innerHTML = type;
 	this.body.innerHTML = message;
 	this.elem.style.display = "flex";
 };
 
-CustomPopupClass.prototype.closePopup = function () {
+CustomPopupClass.prototype.closePopup = function(){
 	this.elem.style.display = "none";
 }
 
-CustomPopupClass.prototype.registerEvent = function () {
+CustomPopupClass.prototype.registerEvent = function(){
 	var obj = this;
-
-	this.close.addEventListener("click", function () {
+	
+	this.close.addEventListener("click", function(){
 		obj.closePopup();
-	});
-
-	this.background.addEventListener("click", function () {
+	}); 
+	
+	this.background.addEventListener("click", function(){
 		obj.closePopup();
-	});
+	}); 
 };
 
-function alert(message) {
-
-	if (CUSTOM_POPUP == null) {
+function alert(message){
+	
+	if(CUSTOM_POPUP == null){
 		console.log("initializing Custom Popup");
 		CUSTOM_POPUP = new CustomPopupClass();
 	}
@@ -77,96 +168,100 @@ function alert(message) {
 	return;
 }
 
-//setTimeout(function () {
-//	alert("test");
-//}, 1000);
+
+setTimeout(function(){
+	alert("test");
+},1000);
 
 // ################################################################
 // ################################################################
 // Custom Event Handler ------------------------------------------
 
-function customEventHandler() {
+function customEventHandler(){
 	var CLEAR_ALL_TIMEOUT = 8000;
 	var INTERVAL_TIME = 200;
 
 	var CUSTOM_CLASS = {
-		DISABLED: "INPUT-DISABLED",
-		MANDATORY: "INPUT-MANDATORY",
-		OPTIONAL: "INPUT-OPTIONAL"
+		DISABLED : "INPUT-DISABLED",
+		MANDATORY : "INPUT-MANDATORY",
+		OPTIONAL : "INPUT-OPTIONAL"
 	};
-
+	
 	var intervals = {};
-	intervals[CUSTOM_CLASS.DISABLED] = setInterval(function () {
-			inputEvent(CUSTOM_CLASS.DISABLED);
-		}, INTERVAL_TIME);
+	intervals[CUSTOM_CLASS.DISABLED] = setInterval(function(){
+		inputEvent(CUSTOM_CLASS.DISABLED);
+	}, INTERVAL_TIME);
 
-	intervals[CUSTOM_CLASS.MANDATORY] = setInterval(function () {
-			inputEvent(CUSTOM_CLASS.MANDATORY);
-		}, INTERVAL_TIME);
+	intervals[CUSTOM_CLASS.MANDATORY] = setInterval(function(){
+		inputEvent(CUSTOM_CLASS.MANDATORY);
+	}, INTERVAL_TIME);
 
 	/*
 	intervals[CUSTOM_CLASS.OPTIONAL] = setInterval(function(){
-	inputEvent(CUSTOM_CLASS.OPTIONAL);
+		inputEvent(CUSTOM_CLASS.OPTIONAL);
 	}, INTERVAL_TIME);
-	 */
-
-	function inputEventAction(e, className) {
+	*/
+	
+	function inputEventAction(e, className){
 		e.removeAttribute("required");
 		e.removeAttribute("disabled");
-		if (className == CUSTOM_CLASS.DISABLED) {
-			e.setAttribute("disabled", "");
-		} else if (className == CUSTOM_CLASS.MANDATORY) {
-			e.setAttribute("required", "");
-		} else if (className === CUSTOM_CLASS.OPTIONAL) {}
+		if(className == CUSTOM_CLASS.DISABLED){
+			e.setAttribute("disabled","");
+		}else if(className == CUSTOM_CLASS.MANDATORY){
+			e.setAttribute("required","");
+		}else if(className === CUSTOM_CLASS.OPTIONAL){
+		
+		}
 	}
-
-	setTimeout(function () {
-		for (var i in intervals) {
+	
+	setTimeout(function(){
+		for(var i in intervals){
 			clearInterval(intervals[i]);
 		}
-	}, CLEAR_ALL_TIMEOUT);
+	},CLEAR_ALL_TIMEOUT);
 
-	function clearIntervalByClass(className) {
+	function clearIntervalByClass(className){
 		clearInterval(intervals[className]);
 	}
 
-	function inputEvent(className) {
+	function inputEvent(className){
 		var namedInput = document.getElementsByClassName(className);
 		var success = false;
 		//console.log("trying ... ", className);
-		for (var i in namedInput) {
-			try {
+		for(var i in namedInput){
+			try{
 				i = Number.parseInt(i);
-				if (Number.isNaN(i)) {
+				if(Number.isNaN(i)){
 					continue;
 				}
-
+				
 				var e = namedInput[i];
 				inputEventAction(e, className);
-				addClassObserver(e);
+				addClassObserver(e);	
 				success = true;
-			} catch (err) {
+			}
+			catch(err){
 				console.log(err);
 			}
 		}
-
-		if (success) {
+		
+		if(success){
 			clearIntervalByClass(className);
 		}
-
+		
 	}
 
-	function addClassObserver(e) {
+	function addClassObserver(e){
 		var observer = new MutationObserver(function (event) {
-				inputEventAction(e, e.className);
-			})
+		  inputEventAction(e, e.className);
+		})
 
-			observer.observe(e, {
-				attributes: true,
-				attributeFilter: ['class'],
-				childList: false,
-				characterData: false
-			})
+		observer.observe(e, {
+		  attributes: true, 
+		  attributeFilter: ['class'],
+		  childList: false, 
+		  characterData: false
+		})
 	}
 }
 
@@ -176,7 +271,7 @@ customEventHandler();
 // ################################################################
 // Custom Local Storage ------------------------------------------
 
-function customLocalStorage() {
+function customLocalStorage(){
 	var LS_AUTH = "JPN-LOCAL-STORAGE-AUTH";
 
 	function setLocalStorage() {
@@ -192,13 +287,7 @@ function customLocalStorage() {
 		if (obj !== null) {
 			obj = JSON.parse(obj);
 		}
-		
-		try{
-			setNewApplicationNo(obj.user.BRANCH_CODE, obj.user.PC_ID);
-		}catch(err){
-			console.log("setNewApplicationNo err",err);
-		}
-		
+		setNewApplicationNo(obj.user.BRANCH_CODE, obj.user.PC_ID);
 		setValue('PC_ID', obj.user.PC_ID);
 		setValue('BRANCH_CODE', obj.user.BRANCH_CODE);
 		setValue('OPER_ID', obj.user.OPER_ID);
@@ -218,7 +307,6 @@ function customLocalStorage() {
 				//var el = document.getElementsByClassName(elemId)[0];
 				if (el != null && typeof el !== "undefined") {
 					el.value = elemVal;
-					el.addAtribute("disabled","");
 					clearInterval(interval)
 				}
 			}, 500);
@@ -238,4 +326,21 @@ function customLocalStorage() {
 
 customLocalStorage();
 
+
+
+
 </script>
+</head>
+
+<body>
+
+
+<select class="INPUT-DISABLED" name="LB_Jenis_Perintah" id="LB_Jenis_Perintah" style="position: absolute; left: 862px; top: 286px; width: 424px;">  
+  <option value=" ">&lt;NONE&gt;</option> 
+</select>
+
+<input autocomplete="off" class="INPUT-DISABLED" name="tab1_ef_tarikh_perintah" id="tab1_ef_tarikh_perintah" maxlength="10" style="position: absolute; left: 862px; top: 426px; width: 115px; height: 22px;" type="TEXT">
+
+</body>
+
+</html>
