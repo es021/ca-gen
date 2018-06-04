@@ -1,0 +1,186 @@
+/*wzs21*/
+
+/** 
+
+Main Group Box Fieldset : set name to main_gb
+
+Input
+----------------
+required : set backgroundColor to 1
+not required : set backgroundColor to 0
+
+Tab
+----------------
+Tab Push Button : name must have TAB in it
+Tab Push Button Active : set name to TAB_ACTIVE
+
+Breadcrumb : set name to ltl_breadcrumb
+
+
+* for disabled set as usual
+* remove all CssClass code
+
+*/
+body{
+background: blue;
+font-family: Arial, Helvetica, sans-serif !important;
+}
+
+div.gen_content{
+	margin: auto !important;
+}
+
+/*###################################*/
+/* dropdown list */
+.gen_dropdownlist button{
+border: 1px solid #255cc4 !important;
+background-color: white !important;
+}
+
+span.gen_dropdownlist, span.gen_dropdownlist span{
+border-color: rgba(0,0,0,0) !important;
+background: rgba(0,0,0,0) !important;
+}
+
+/*###################################*/
+/* tab */
+span[id*="PB_"],span[id*="PB_"] span,
+span[id*="TAB"],span[id*="TAB"] span{
+border-color: rgba(0,0,0,0) !important;
+background: rgba(0,0,0,0) !important;
+}
+
+button[id*="PB_"],button[id*="TAB"]{
+	color: #255cc4 !important;
+	padding: 0px 5px !important;
+	font-size: 12px !important; 
+	margin-right: 0px !important;
+	border: 1px solid #255cc4 !important;
+	background-color: white !important;
+	cursor: pointer !important;
+	font-weight: bold !important;
+}
+
+button[id*="PB_TAB"],button[id*="TAB"]{
+	border-radius: 13px 13px 0px 0px !important;
+}
+
+span[id*="PB_EXIT"]{
+	display:none;
+}
+
+
+button:hover {
+background-color: #255cc4 !important;
+color: white !important;
+}
+
+button[id*="PB_"]:active{
+opacity:0.8 !important;
+}
+
+/*###################################*/
+/*override tab color */
+button[id*="TAB"]{
+color:white !important;
+border-color: #666666!important;
+background-color: #666666!important;
+
+}
+
+button[id*="TAB"]:hover, button[id*="TAB_ACTIVE"]{
+background-color: #f5871f!important;
+color: white !important;
+}
+
+button[disabled="disabled"],button[disabled=""]
+,button[disabled="disabled"]:hover,button[disabled=""]:hover
+,button[disabled="disabled"]:active,button[disabled=""]:active{
+color: #4a4a4a !important;
+background-color: #c3c3c3 !important;
+cursor: not-allowed !important;
+border-color: #545454 !important;
+}
+
+button[id*="TAB"][disabled="disabled"],
+button[id*="TAB"][disabled="disabled"]:hover{
+color: #999999 !important;
+background-color: #666666 !important;
+cursor: not-allowed !important;
+border-color: #545454 !important;
+}
+
+
+
+buttonid*="TAB"][disabled="disabled"]{
+color: #999999 !important;
+background-color: #666666 !important;
+cursor: not-allowed !important;
+border-color: #545454 !important;
+}
+
+/*###################################*/
+/* Input */
+input{
+border: 1px solid gray !important;
+padding: 0px 4px !important;
+}
+
+input[disabled=""],input[readonly=""]{  
+color: black !important;
+background-color: whitesmoke !important;
+cursor: not-allowed !important;
+}
+
+/** required field *****/
+input[style*="background-color: rgb(0, 0, 1);"]
+,input[style*="rgb(0, 0, 1);"]
+,input[style*="background-color: rgb(1, 178, 7);"]
+,input[style*="rgb(1, 178, 7);"]{
+background-color: #ffe0e0 !important;
+border: 1px solid #e5373 !important;
+}
+
+/*###################################*/
+/* Fieldset */
+fieldset[id*="GroupBox"],fieldset.gen_group{  
+border: 1px solid #255cc4 !important;
+padding: 0px 9px 0px 4px !important;
+background-color:#f9f9ff !important;
+}
+
+fieldset[id*="GroupBox"] legend[id*="legend"],fieldset.gen_group legend{  
+color: #255cc4 !important;
+font-weight: bold !important;
+/*background: white !important;*/
+/* padding: 0px 7px !important; */
+
+font-size: 16px !important;
+margin-bottom: -25px !important;
+margin-left: 5px !important;
+}
+
+/*###################################*/
+/** MAIN GroupBox *********/
+div.gen_content{
+background: linear-gradient(to bottom right,white,#f2f5ff) !important; 
+background: white !important; 
+}
+fieldset[id*="main_gb"]{
+box-shadow: none !important;
+margin: auto important;
+background-color: white !important;
+position: relative important;
+border-color: rgba(0,0,0,0) !important;
+}
+
+/*###################################*/
+/** Breadcrumb *****/
+span[id*="ltl_breadcrumb"]{
+border-top: 1px #255cc4 solid;
+margin-top: 2px;
+color: #255cc4;
+font-weight: bold;
+padding: 5px 0px;
+}
+
