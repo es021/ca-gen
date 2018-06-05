@@ -109,7 +109,25 @@ function customEventHandler() {
 		BTN_DISABLED: "MENU-BTN-DISABLED",
 		NAV_BTN_DISABLED: "NAVBTN-DISABLED",
 	};
-
+	
+	
+	for(var k in CUSTOM_CLASS){
+		inputEvent(CUSTOM_CLASS[k]);
+	}
+	
+	
+	function inputEventAction(e, className) {
+		e.removeAttribute("required");
+		e.removeAttribute("disabled");
+		
+		if ([CUSTOM_CLASS.DISABLED, CUSTOM_CLASS.PROTECTED, CUSTOM_CLASS.TAB_DISABLED, CUSTOM_CLASS.BTN_DISABLED, CUSTOM_CLASS.NAV_BTN_DISABLED].indexOf(className) >= 0) {
+			e.setAttribute("disabled", "");
+		} else if ([CUSTOM_CLASS.MANDATORY, CUSTOM_CLASS.MUSTKEYIN].indexOf(className) >= 0) {
+			e.setAttribute("required", "");
+		}
+	}
+	
+	/*
 	var intervals = {};
 	intervals[CUSTOM_CLASS.DISABLED] = setInterval(function () {
 			inputEvent(CUSTOM_CLASS.DISABLED);
@@ -138,31 +156,26 @@ function customEventHandler() {
 	intervals[CUSTOM_CLASS.NAV_BTN_DISABLED] = setInterval(function () {
 			inputEvent(CUSTOM_CLASS.NAV_BTN_DISABLED);
 		}, INTERVAL_TIME);
+	*/
+	
 
-	function inputEventAction(e, className) {
-		e.removeAttribute("required");
-		e.removeAttribute("disabled");
-		
-		if ([CUSTOM_CLASS.DISABLED, CUSTOM_CLASS.PROTECTED, CUSTOM_CLASS.TAB_DISABLED, CUSTOM_CLASS.BTN_DISABLED, CUSTOM_CLASS.NAV_BTN_DISABLED].indexOf(className) >= 0) {
-			e.setAttribute("disabled", "");
-		} else if ([CUSTOM_CLASS.MANDATORY, CUSTOM_CLASS.MUSTKEYIN].indexOf(className) >= 0) {
-			e.setAttribute("required", "");
-		}
-	}
-
+	/*
 	setTimeout(function () {
 		for (var i in intervals) {
 			clearInterval(intervals[i]);
 		}
 	}, CLEAR_ALL_TIMEOUT);
-
+	*/
+	
+	/*
 	function clearIntervalByClass(className) {
 		clearInterval(intervals[className]);
 	}
+	*/
 
 	function inputEvent(className) {
 		var namedInput = document.getElementsByClassName(className);
-		var success = false;
+		//var success = false;
 		//console.log("trying ... ", className);
 		for (var i in namedInput) {
 			try {
@@ -174,15 +187,15 @@ function customEventHandler() {
 				var e = namedInput[i];
 				inputEventAction(e, className);
 				addClassObserver(e);
-				success = true;
+				//success = true;
 			} catch (err) {
 				console.log(err);
 			}
 		}
 
-		if (success) {
-			clearIntervalByClass(className);
-		}
+		//if (success) {
+		//	clearIntervalByClass(className);
+		//}
 
 	}
 
@@ -196,11 +209,11 @@ function customEventHandler() {
 				attributeFilter: ['class'],
 				childList: false,
 				characterData: false
-			})
+			});
 	}
 }
 
-customEventHandler();
+setInterval(function(){customEventHandler();},500);
 
 // ################################################################
 // ################################################################
@@ -222,13 +235,13 @@ function customLocalStorage() {
 		var obj = localStorage.getItem(LS_AUTH);
 		if (obj !== null) {
 			obj = JSON.parse(obj);
+			
+			setValue('PC_ID', obj.user.PC_ID);
+			setValue('BRANCH_CODE', obj.user.BRANCH_CODE);
+			setValue('OPER_ID', obj.user.OPER_ID);
+			
+			setDefaultValue(obj);
 		}
-
-		setValue('PC_ID', obj.user.PC_ID);
-		setValue('BRANCH_CODE', obj.user.BRANCH_CODE);
-		setValue('OPER_ID', obj.user.OPER_ID);
-		
-		setDefaultValue(obj);
 	}
 	
 	function setDefaultValue(obj){
