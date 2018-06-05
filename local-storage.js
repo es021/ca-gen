@@ -208,6 +208,7 @@ customEventHandler();
 
 function customLocalStorage() {
 	var LS_AUTH = "JPN-LOCAL-STORAGE-AUTH";
+	var INTERVAL_TIME = 500;
 
 	function setLocalStorage() {
 		var tempLS = localStorage.getItem(LS_AUTH);
@@ -223,15 +224,23 @@ function customLocalStorage() {
 			obj = JSON.parse(obj);
 		}
 
+		
+		setValue('PC_ID', obj.user.PC_ID);
+		setValue('BRANCH_CODE', obj.user.BRANCH_CODE);
+		setValue('OPER_ID', obj.user.OPER_ID);
+		
 		try {
 			setNewApplicationNo(obj.user.BRANCH_CODE, obj.user.PC_ID);
 		} catch (err) {
 			console.log("setNewApplicationNo err", err);
 		}
+		
+		try {
+			setPejabatPendaftaran("t1_lb_pej_daftar", obj.user.BRANCH_CODE);
+		} catch (err) {
+			console.log("setPejabatPendaftaran err", err);
+		}
 
-		setValue('PC_ID', obj.user.PC_ID);
-		setValue('BRANCH_CODE', obj.user.BRANCH_CODE);
-		setValue('OPER_ID', obj.user.OPER_ID);
 	}
 
 	function setNewApplicationNo(cawangan, pcid) {
@@ -241,6 +250,7 @@ function customLocalStorage() {
 			 + '-' + ('0' + d.getHours()).slice(-2) + '' + ('0' + d.getMinutes()).slice(-2) + '' + ('0' + d.getSeconds()).slice(-2) + '-' + pcid.slice(-2);
 		setValue('t1_ef_no_permohonan', noPermohonan);
 	}
+	
 	
 	function setValueAction(el, elemVal){
 		el.value = elemVal;
@@ -261,9 +271,44 @@ function customLocalStorage() {
 					console.log("setValue err", err);
 				}
 
-			}, 500);
+			}, INTERVAL_TIME);
 	}
+	
+	var cawanganSelectIndex = null;
+	function setPejabatPendaftaran(elemId, cawangan){
+		var interval = setInterval(function () {
 
+			try {
+				var el = document.getElementById(elemId);
+				if (el != null && typeof el !== "undefined") {
+				
+					if(cawanganSelectIndex == null){
+						for (var i = 0; i < el.length; i++) {
+							 var val =el[i].text;
+							 valArr = val.split("-");
+							 
+							 if(typeof valArr[0] === "string"){
+								var cawanganCode = valArr[0].trim();							 
+								if(cawangan == cawanganCode){
+									cawanganSelectIndex = i;
+								}
+							 }
+						}
+					}
+					
+					if(cawanganSelectIndex != null){
+						el.selectedIndex = cawanganSelectIndex;
+					}
+					
+					clearInterval(interval);
+				}
+			} catch (err) {
+				console.log("setValue setPejabatPendaftaran err", err);
+			}
+
+		}, INTERVAL_TIME);
+	}
+	
 	try {
 		setLocalStorage();
 	} catch (err) {

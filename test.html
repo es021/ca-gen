@@ -87,7 +87,8 @@
 }
 
 
-</style> <script>
+</style> 
+ <script>
 // ################################################################
 // ################################################################
 // Custom Popup ------------------------------------------
@@ -193,6 +194,7 @@ function customEventHandler() {
 		DISABLED: "INPUT-DISABLED",
 		PROTECTED: "INPUT-PROTECTED",
 		MANDATORY: "INPUT-MANDATORY",
+		MUSTKEYIN: "INPUT-MUSTKEYIN",
 		TAB_DISABLED: "TAB-DISABLED",
 		BTN_DISABLED: "MENU-BTN-DISABLED",
 		NAV_BTN_DISABLED: "NAVBTN-DISABLED",
@@ -201,16 +203,28 @@ function customEventHandler() {
 	var intervals = {};
 	intervals[CUSTOM_CLASS.DISABLED] = setInterval(function () {
 			inputEvent(CUSTOM_CLASS.DISABLED);
+		}, INTERVAL_TIME);	
+		
+	intervals[CUSTOM_CLASS.PROTECTED] = setInterval(function () {
+			inputEvent(CUSTOM_CLASS.PROTECTED);
 		}, INTERVAL_TIME);
 
 	intervals[CUSTOM_CLASS.MANDATORY] = setInterval(function () {
 			inputEvent(CUSTOM_CLASS.MANDATORY);
 		}, INTERVAL_TIME);
 
+	intervals[CUSTOM_CLASS.MUSTKEYIN] = setInterval(function () {
+			inputEvent(CUSTOM_CLASS.MUSTKEYIN);
+		}, INTERVAL_TIME);
+		
 	intervals[CUSTOM_CLASS.TAB_DISABLED] = setInterval(function () {
 			inputEvent(CUSTOM_CLASS.TAB_DISABLED);
 		}, INTERVAL_TIME);
 
+	intervals[CUSTOM_CLASS.BTN_DISABLED] = setInterval(function () {
+			inputEvent(CUSTOM_CLASS.TAB_DISABLED);
+		}, INTERVAL_TIME);
+		
 	intervals[CUSTOM_CLASS.NAV_BTN_DISABLED] = setInterval(function () {
 			inputEvent(CUSTOM_CLASS.NAV_BTN_DISABLED);
 		}, INTERVAL_TIME);
@@ -218,10 +232,10 @@ function customEventHandler() {
 	function inputEventAction(e, className) {
 		e.removeAttribute("required");
 		e.removeAttribute("disabled");
-
+		
 		if ([CUSTOM_CLASS.DISABLED, CUSTOM_CLASS.PROTECTED, CUSTOM_CLASS.TAB_DISABLED, CUSTOM_CLASS.BTN_DISABLED, CUSTOM_CLASS.NAV_BTN_DISABLED].indexOf(className) >= 0) {
 			e.setAttribute("disabled", "");
-		} else if (className == CUSTOM_CLASS.MANDATORY) {
+		} else if ([CUSTOM_CLASS.MANDATORY, CUSTOM_CLASS.MUSTKEYIN].indexOf(className) >= 0) {
 			e.setAttribute("required", "");
 		}
 	}
@@ -284,6 +298,7 @@ customEventHandler();
 
 function customLocalStorage() {
 	var LS_AUTH = "JPN-LOCAL-STORAGE-AUTH";
+	var INTERVAL_TIME = 500;
 
 	function setLocalStorage() {
 		var tempLS = localStorage.getItem(LS_AUTH);
@@ -299,15 +314,23 @@ function customLocalStorage() {
 			obj = JSON.parse(obj);
 		}
 
+		
+		setValue('PC_ID', obj.user.PC_ID);
+		setValue('BRANCH_CODE', obj.user.BRANCH_CODE);
+		setValue('OPER_ID', obj.user.OPER_ID);
+		
 		try {
 			setNewApplicationNo(obj.user.BRANCH_CODE, obj.user.PC_ID);
 		} catch (err) {
 			console.log("setNewApplicationNo err", err);
 		}
+		
+		try {
+			setPejabatPendaftaran("t1_lb_pej_daftar", obj.user.BRANCH_CODE);
+		} catch (err) {
+			console.log("setPejabatPendaftaran err", err);
+		}
 
-		setValue('PC_ID', obj.user.PC_ID);
-		setValue('BRANCH_CODE', obj.user.BRANCH_CODE);
-		setValue('OPER_ID', obj.user.OPER_ID);
 	}
 
 	function setNewApplicationNo(cawangan, pcid) {
@@ -317,25 +340,65 @@ function customLocalStorage() {
 			 + '-' + ('0' + d.getHours()).slice(-2) + '' + ('0' + d.getMinutes()).slice(-2) + '' + ('0' + d.getSeconds()).slice(-2) + '-' + pcid.slice(-2);
 		setValue('t1_ef_no_permohonan', noPermohonan);
 	}
-
+	
+	
+	function setValueAction(el, elemVal){
+		el.value = elemVal;
+		el.setAttribute("disabled", "");
+		el.setAttribute("value", elemVal);
+	}
+	
 	function setValue(elemId, elemVal) {
 		var interval = setInterval(function () {
-
 				try {
 					var el = document.getElementById(elemId);
 					//var el = document.getElementsByClassName(elemId)[0];
 					if (el != null && typeof el !== "undefined") {
-						el.value = elemVal;
-						el.setAttribute("disabled", "");
+						setValueAction(el, elemVal);
 						//clearInterval(interval)
 					}
 				} catch (err) {
 					console.log("setValue err", err);
 				}
 
-			}, 500);
+			}, INTERVAL_TIME);
 	}
+	
+	var cawanganSelectIndex = null;
+	function setPejabatPendaftaran(elemId, cawangan){
+		var interval = setInterval(function () {
 
+			try {
+				var el = document.getElementById(elemId);
+				if (el != null && typeof el !== "undefined") {
+				
+					if(cawanganSelectIndex == null){
+						for (var i = 0; i < el.length; i++) {
+							 var val =el[i].text;
+							 valArr = val.split("-");
+							 
+							 if(typeof valArr[0] === "string"){
+								var cawanganCode = valArr[0].trim();							 
+								if(cawangan == cawanganCode){
+									cawanganSelectIndex = i;
+								}
+							 }
+						}
+					}
+					
+					if(cawanganSelectIndex != null){
+						el.selectedIndex = cawanganSelectIndex;
+					}
+					
+					clearInterval(interval);
+				}
+			} catch (err) {
+				console.log("setValue setPejabatPendaftaran err", err);
+			}
+
+		}, INTERVAL_TIME);
+	}
+	
 	try {
 		setLocalStorage();
 	} catch (err) {
@@ -354,6 +417,13 @@ customLocalStorage();
 </head>
 
 <body>
+
+<select class="INPUT-MANDATORY" name="t1_lb_pej_daftar" id="t1_lb_pej_daftar" style="dir:ltr;   position:absolute; left:208; top:328; width:424;  " required="">  
+  <option value=" ">&lt;NONE&gt;</option> 
+  <option value="16011012 - branch test 2">16011012 - branch test 2</option> 
+    <option value="16011019 - branch test 1">16011019 - branch test 1</option> 
+  <option value="16011013 - branch test 3">16011013 - branch test 3</option> 
+</select>
 
 <button class="NAVBTN-DISABLED" name="PB_PREV_tb1" id="PB_PREV_tb1" style="position: absolute; left: 1251px; top: 114px; width: 40px; height: 40px; visibility: visible;">&lt;&lt;</button>
 
