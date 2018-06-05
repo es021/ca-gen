@@ -1,4 +1,4 @@
-<script>
+ <script>
 // ################################################################
 // ################################################################
 // Custom Popup ------------------------------------------
@@ -68,7 +68,18 @@ CustomPopupClass.prototype.registerEvent = function () {
 function alert(message) {
 
 	if (CUSTOM_POPUP == null) {
-		console.log("initializing Custom Popup");
+		console.log("initializing Custom Popup from alert");
+		CUSTOM_POPUP = new CustomPopupClass();
+	}
+
+	var type = CUSTOM_POPUP.TYPE_ERR;
+	CUSTOM_POPUP.openPopup(type, message);
+	return;
+}
+
+window.alert = function (message) {
+	if (CUSTOM_POPUP == null) {
+		console.log("initializing Custom Popup from window.alert");
 		CUSTOM_POPUP = new CustomPopupClass();
 	}
 
@@ -91,32 +102,50 @@ function customEventHandler() {
 
 	var CUSTOM_CLASS = {
 		DISABLED: "INPUT-DISABLED",
+		PROTECTED: "INPUT-PROTECTED",
 		MANDATORY: "INPUT-MANDATORY",
-		TAB_DISABLED:"TAB-DISABLED",
-		BTN_DISABLED:"MENU-BTN-DISABLED",
+		MUSTKEYIN: "INPUT-MUSTKEYIN",
+		TAB_DISABLED: "TAB-DISABLED",
+		BTN_DISABLED: "MENU-BTN-DISABLED",
+		NAV_BTN_DISABLED: "NAVBTN-DISABLED",
 	};
 
 	var intervals = {};
 	intervals[CUSTOM_CLASS.DISABLED] = setInterval(function () {
 			inputEvent(CUSTOM_CLASS.DISABLED);
-		}, INTERVAL_TIME);
+		}, INTERVAL_TIME);	
 		
+	intervals[CUSTOM_CLASS.PROTECTED] = setInterval(function () {
+			inputEvent(CUSTOM_CLASS.PROTECTED);
+		}, INTERVAL_TIME);
+
 	intervals[CUSTOM_CLASS.MANDATORY] = setInterval(function () {
 			inputEvent(CUSTOM_CLASS.MANDATORY);
 		}, INTERVAL_TIME);
 
+	intervals[CUSTOM_CLASS.MUSTKEYIN] = setInterval(function () {
+			inputEvent(CUSTOM_CLASS.MUSTKEYIN);
+		}, INTERVAL_TIME);
+		
 	intervals[CUSTOM_CLASS.TAB_DISABLED] = setInterval(function () {
 			inputEvent(CUSTOM_CLASS.TAB_DISABLED);
 		}, INTERVAL_TIME);
 
+	intervals[CUSTOM_CLASS.BTN_DISABLED] = setInterval(function () {
+			inputEvent(CUSTOM_CLASS.TAB_DISABLED);
+		}, INTERVAL_TIME);
+		
+	intervals[CUSTOM_CLASS.NAV_BTN_DISABLED] = setInterval(function () {
+			inputEvent(CUSTOM_CLASS.NAV_BTN_DISABLED);
+		}, INTERVAL_TIME);
 
 	function inputEventAction(e, className) {
 		e.removeAttribute("required");
 		e.removeAttribute("disabled");
 		
-		if (className == CUSTOM_CLASS.DISABLED || className == CUSTOM_CLASS.TAB_DISABLED || className == CUSTOM_CLASS.BTN_DISABLED) {
+		if ([CUSTOM_CLASS.DISABLED, CUSTOM_CLASS.PROTECTED, CUSTOM_CLASS.TAB_DISABLED, CUSTOM_CLASS.BTN_DISABLED, CUSTOM_CLASS.NAV_BTN_DISABLED].indexOf(className) >= 0) {
 			e.setAttribute("disabled", "");
-		} else if (className == CUSTOM_CLASS.MANDATORY) {
+		} else if ([CUSTOM_CLASS.MANDATORY, CUSTOM_CLASS.MUSTKEYIN].indexOf(className) >= 0) {
 			e.setAttribute("required", "");
 		}
 	}
@@ -193,13 +222,13 @@ function customLocalStorage() {
 		if (obj !== null) {
 			obj = JSON.parse(obj);
 		}
-		
-		try{
+
+		try {
 			setNewApplicationNo(obj.user.BRANCH_CODE, obj.user.PC_ID);
-		}catch(err){
-			console.log("setNewApplicationNo err",err);
+		} catch (err) {
+			console.log("setNewApplicationNo err", err);
 		}
-		
+
 		setValue('PC_ID', obj.user.PC_ID);
 		setValue('BRANCH_CODE', obj.user.BRANCH_CODE);
 		setValue('OPER_ID', obj.user.OPER_ID);
@@ -212,22 +241,26 @@ function customLocalStorage() {
 			 + '-' + ('0' + d.getHours()).slice(-2) + '' + ('0' + d.getMinutes()).slice(-2) + '' + ('0' + d.getSeconds()).slice(-2) + '-' + pcid.slice(-2);
 		setValue('t1_ef_no_permohonan', noPermohonan);
 	}
-
+	
+	function setValueAction(el, elemVal){
+		el.value = elemVal;
+		el.setAttribute("disabled", "");
+		el.setAttribute("value", elemVal);
+	}
+	
 	function setValue(elemId, elemVal) {
 		var interval = setInterval(function () {
-			
-			try{
-				var el = document.getElementById(elemId);
-				//var el = document.getElementsByClassName(elemId)[0];
-				if (el != null && typeof el !== "undefined") {
-					el.value = elemVal;
-					el.setAttribute("disabled","");
-					//clearInterval(interval)
+				try {
+					var el = document.getElementById(elemId);
+					//var el = document.getElementsByClassName(elemId)[0];
+					if (el != null && typeof el !== "undefined") {
+						setValueAction(el, elemVal);
+						//clearInterval(interval)
+					}
+				} catch (err) {
+					console.log("setValue err", err);
 				}
-			}catch(err){
-				console.log("setValue err",err);
-			}
-				
+
 			}, 500);
 	}
 
