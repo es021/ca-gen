@@ -224,23 +224,30 @@ function customLocalStorage() {
 			obj = JSON.parse(obj);
 		}
 
-		
 		setValue('PC_ID', obj.user.PC_ID);
 		setValue('BRANCH_CODE', obj.user.BRANCH_CODE);
 		setValue('OPER_ID', obj.user.OPER_ID);
 		
-		try {
-			setNewApplicationNo(obj.user.BRANCH_CODE, obj.user.PC_ID);
-		} catch (err) {
-			console.log("setNewApplicationNo err", err);
-		}
+		setDefaultValue(obj);
+	}
+	
+	function setDefaultValue(obj){
+		var pathname = location.pathname;
 		
-		try {
-			setPejabatPendaftaran("t1_lb_pej_daftar", obj.user.BRANCH_CODE);
-		} catch (err) {
-			console.log("setPejabatPendaftaran err", err);
+		// only in amira's page
+		if(pathname.indexOf("w3850102.jsp") >= 0){
+			try {
+				setNewApplicationNo(obj.user.BRANCH_CODE, obj.user.PC_ID);
+			} catch (err) {
+				console.log("setNewApplicationNo err", err);
+			}
+			
+			try {
+				setPejabatPendaftaran("t1_lb_pej_daftar", obj.user.BRANCH_CODE);
+			} catch (err) {
+				console.log("setPejabatPendaftaran err", err);
+			}
 		}
-
 	}
 
 	function setNewApplicationNo(cawangan, pcid) {
